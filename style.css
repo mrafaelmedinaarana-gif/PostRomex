@@ -103,14 +103,21 @@ justify-content:space-between;
 }
 
 .ticket{
-width:300px;
+width:80mm;
 background:white;
 color:black;
 font-family:monospace;
+font-size:12px;
 padding:10px;
+text-align:left;
+line-height:1.4;
 }
 
 @media print {
+
+body{
+margin:0;
+}
 
 body *{
 visibility:hidden;
