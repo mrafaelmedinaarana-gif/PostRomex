@@ -1,7 +1,16 @@
 import { db, collection, addDoc, getDocs, deleteDoc, doc } from "./firebase.js"
 
-let mesaActual=0
-let pedido=[]
+let mesas = {
+1: [],
+2: [],
+3: [],
+4: [],
+5: [],
+6: [],
+7: []
+};
+
+let mesaActual = 0;
 let total=0
 let mesasEstado=[false,false,false,false,false,false,false]
 
@@ -76,7 +85,6 @@ Mesa ${i}
 window.abrirMesa=async(num)=>{
 
 mesaActual=num
-pedido=[]
 total=0
 
 mesasEstado[num-1]=true
@@ -121,7 +129,7 @@ cont.innerHTML+=`
 
 window.agregarPedido=(nombre,precio)=>{
 
-pedido.push({nombre,precio})
+mesas[mesaActual].push({nombre,precio})
 
 total+=precio
 
@@ -135,11 +143,29 @@ let cont=document.getElementById("pedido")
 
 cont.innerHTML=""
 
-pedido.forEach(p=>{
-cont.innerHTML+=`<div>${p.nombre} $${p.precio}</div>`
-})
+mesas[mesaActual].forEach((p,index)=>{
 
+cont.innerHTML+=`
+<div>
+${p.nombre} $${p.precio}
+<button onclick="quitarPlatillo(${index})">❌</button>
+</div>
+`
+
+})
 document.getElementById("total").innerText=total
+
+}
+
+window.quitarPlatillo=(index)=>{
+
+let item=mesas[mesaActual][index]
+
+total-=item.precio
+
+mesas[mesaActual].splice(index,1)
+
+renderPedido()
 
 }
 
@@ -149,10 +175,12 @@ mesasEstado[mesaActual-1]=false
 
 await addDoc(collection(db,"ventas"),{
 mesa:mesaActual,
-pedido:pedido,
+pedido:mesas[mesaActual]
 total:total,
 fecha:new Date().toISOString()
 })
+
+mesas[mesaActual]=[]
 
 crearMesas()
 
