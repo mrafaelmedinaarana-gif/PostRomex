@@ -85,7 +85,6 @@ Mesa ${i}
 window.abrirMesa=async(num)=>{
 
 mesaActual=num
-total=0
 
 mesasEstado[num-1]=true
 
@@ -95,7 +94,7 @@ document.getElementById("mesaTitulo").innerText="Mesa "+num
 
 ocultar()
 document.getElementById("comanda").style.display="block"
-
+renderPedido()
 cargarMenu()
 
 }
