@@ -129,9 +129,10 @@ cont.innerHTML+=`
 
 window.agregarPedido=(nombre,precio)=>{
 
-mesas[mesaActual].push({nombre,precio})
-
-total+=precio
+mesas[mesaActual].push({
+nombre:nombre,
+precio:precio
+})
 
 renderPedido()
 
@@ -142,9 +143,10 @@ function renderPedido(){
 let cont=document.getElementById("pedido")
 
 cont.innerHTML=""
+ total=0 
 
 mesas[mesaActual].forEach((p,index)=>{
-
+total+=p.precio
 cont.innerHTML+=`
 <div>
 ${p.nombre} $${p.precio}
@@ -175,7 +177,7 @@ mesasEstado[mesaActual-1]=false
 
 await addDoc(collection(db,"ventas"),{
 mesa:mesaActual,
-pedido:mesas[mesaActual]
+pedido:mesas[mesaActual],
 total:total,
 fecha:new Date().toISOString()
 })
@@ -219,8 +221,7 @@ ${fecha.toLocaleString()}
 <hr>
 
 `
-
-pedido.forEach(p=>{
+mesas[mesaActual].forEach(p=>{
 ticketHTML+=`${p.nombre} $${p.precio}<br>`
 })
 
